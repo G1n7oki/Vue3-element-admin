@@ -1,22 +1,31 @@
 <template>
   <div class="login-container">
-    <el-form class="login-form">
+    <el-form class="login-form" :model="loginForm" :rules="loginRules">
       <div class="title-container">
         <h3 class="title">用户登录</h3>
       </div>
-      <el-form-item>
+      <el-form-item prop="username">
         <span class="svg-container">
-          <el-icon><Avatar /></el-icon>
+          <svg-icon icon="user" />
         </span>
-        <el-input placeholder="username" name="username" type="text"></el-input>
+        <el-input
+          v-model="loginForm.username"
+          placeholder="username"
+          name="username"
+          type="text"
+        />
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="password">
         <span class="svg-container">
-          <el-icon><Avatar /></el-icon>
+          <svg-icon icon="password" />
         </span>
-        <el-input placeholder="password" name="password"></el-input>
+        <el-input
+          v-model="loginForm.password"
+          placeholder="password"
+          name="password"
+        />
         <span class="show-pwd">
-          <el-icon><Avatar /></el-icon>
+          <svg-icon icon="eye" />
         </span>
       </el-form-item>
       <el-button type="primary" class="login-button">登录</el-button>
@@ -25,7 +34,18 @@
 </template>
 
 <script setup>
-import { Avatar } from '@element-plus/icons'
+import { ref } from 'vue'
+import { validatePassword } from './rules'
+
+const loginForm = ref({
+  username: 'super-admin',
+  password: '123456'
+})
+
+const loginRules = ref({
+  username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
+  password: [{ required: true, trigger: 'blur', validator: validatePassword() }]
+})
 </script>
 
 <style lang="scss" scoped>
@@ -52,7 +72,7 @@ $cursor: #fff;
       color: #454545;
     }
 
-    ::v-deep .el-input {
+    :deep(.el-input) {
       display: inline-block;
       height: 47px;
       width: 85%;
