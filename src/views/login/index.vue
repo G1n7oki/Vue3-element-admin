@@ -22,10 +22,14 @@
         <el-input
           v-model="loginForm.password"
           placeholder="password"
+          :type="passwordType"
           name="password"
         />
         <span class="show-pwd">
-          <svg-icon icon="eye" />
+          <svg-icon
+            :icon="passwordType === 'password' ? 'eye' : 'eye-open'"
+            @click="onChangePwdType"
+          />
         </span>
       </el-form-item>
       <el-button type="primary" class="login-button">登录</el-button>
@@ -46,6 +50,15 @@ const loginRules = ref({
   username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
   password: [{ required: true, trigger: 'blur', validator: validatePassword() }]
 })
+
+const passwordType = ref('password')
+function onChangePwdType() {
+  if (passwordType.value === 'password') {
+    passwordType.value = 'text'
+  } else {
+    passwordType.value = 'password'
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -74,7 +87,7 @@ $cursor: #fff;
 
     :deep(.el-input) {
       display: inline-block;
-      height: 47px;
+      height: 40px;
       width: 85%;
 
       input {
@@ -105,7 +118,8 @@ $cursor: #fff;
     .show-pwd {
       position: absolute;
       right: 10px;
-      top: 7px;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 16px;
       color: $dark_gray;
       cursor: pointer;
