@@ -6,6 +6,16 @@ function resolve(dir) {
 
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@': resolve('src')
+      },
+      fallback: {
+        path: require.resolve('path-browserify')
+      }
+    }
+  },
   transpileDependencies: true,
   chainWebpack(config) {
     config.module.rule('svg').exclude.add(resolve('src/icons')).end()
