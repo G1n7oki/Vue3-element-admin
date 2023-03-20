@@ -95,13 +95,13 @@ const privateRoutes = [
         path: '/article/create',
         name: 'ArticleCreate',
         component: () => import('@/views/article-create/index.vue'),
-        meta: { title: 'ArticleCreate', icon: 'icon' }
+        meta: { title: 'articleCreate', icon: 'icon' }
       },
       {
         path: '/article/editor/:id',
         name: 'ArticleEditor',
         component: () => import('@/views/article-create/index.vue'),
-        meta: { title: 'ArticleEditor', icon: 'icon' }
+        meta: { title: 'articleEditor', icon: 'icon' }
       }
     ]
   }

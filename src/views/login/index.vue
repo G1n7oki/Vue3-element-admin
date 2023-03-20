@@ -7,60 +7,80 @@
       :rules="loginRules"
     >
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">{{ $t('msg.login.title') }}</h3>
+        <LangSelect class="lang-select" effect="light" />
       </div>
       <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon="user" />
-        </span>
         <el-input
           v-model="loginForm.username"
           placeholder="username"
           name="username"
           type="text"
-        />
+        >
+          <template #prepend>
+            <span class="svg-container">
+              <svg-icon icon="user" />
+            </span>
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon="password" />
-        </span>
         <el-input
           v-model="loginForm.password"
           placeholder="password"
           :type="passwordType"
           name="password"
-        />
-        <span class="show-pwd">
-          <svg-icon
-            :icon="passwordType === 'password' ? 'eye' : 'eye-open'"
-            @click="onChangePwdType"
-          />
-        </span>
+        >
+          <template #prepend>
+            <span class="svg-container">
+              <svg-icon icon="password" />
+            </span>
+          </template>
+          <template #suffix>
+            <span class="show-pwd">
+              <svg-icon
+                :icon="passwordType === 'password' ? 'eye' : 'eye-open'"
+                @click="onChangePwdType"
+              />
+            </span>
+          </template>
+        </el-input>
       </el-form-item>
       <el-button
         type="primary"
+        size="large"
         :loading="loading"
         class="login-button"
         @click="handleLogin"
-        >登录</el-button
+        >{{ $t('msg.login.loginBtn') }}</el-button
       >
+      <div class="tips" v-html="$t('msg.login.desc')"></div>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { validatePassword } from './rules'
 import { useStore } from 'vuex'
+import LangSelect from '@/components/LangSelect'
+import { useI18n } from 'vue-i18n'
 
 const loginForm = ref({
   username: 'super-admin',
   password: '123456'
 })
 
+const i18n = useI18n()
+
 const loginRules = ref({
-  username: [{ required: true, message: '用户名为必填项', trigger: 'blur' }],
-  password: [{ required: true, trigger: 'blur', validator: validatePassword() }]
+  username: [
+    {
+      required: true,
+      message: computed(() => i18n.t('msg.login.usernameRule'))
+    }
+  ],
+  password: [{ required: true, validator: validatePassword() }]
 })
 
 const passwordType = ref('password')
@@ -115,23 +135,13 @@ $cursor: #fff;
       border-radius: 5px;
       color: #454545;
     }
-
-    :deep(.el-input) {
-      display: inline-block;
-      height: 40px;
-      width: 85%;
-
-      input {
-        background-color: transparent;
-        border: none;
-        border-radius: 0;
-        padding: 12px 5px 12px 15px;
-        color: $light_gary;
-        caret-color: $cursor;
-      }
+    .tips {
+      font-size: 16px;
+      color: #fff;
+      line-height: 24px;
     }
     .svg-container {
-      padding: 6px 5px 6px 15px;
+      padding: 6px 0;
       color: $dark_gray;
       vertical-align: middle;
       display: inline-block;
@@ -147,17 +157,24 @@ $cursor: #fff;
       }
     }
     .show-pwd {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
       font-size: 16px;
       color: $dark_gray;
       cursor: pointer;
       user-select: none;
     }
+    .lang-select {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      background-color: #fff;
+      font-size: 22px;
+      padding: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
     .login-button {
       width: 100%;
+      height: 44px;
       margin-bottom: 30px;
     }
   }
